@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.6.1 (2021-06-07)
+
+#1 Fixed requireCordovaModule
+
 ## 1.2.6 (2021-06-02)
 
 如果没有传reload参数，则默认需要reload

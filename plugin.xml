@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin id="teh-hot-code-push-plugin" version="1.2.6" 
-  xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+<plugin id="teh-hot-code-push-plugin" version="1.2.6.1"
+  xmlns="http://apache.org/cordova/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android">
   <name>Tehang Code Push Plugin</name>
   <description>Cordova plugin to perform code updates on the fly</description>
@@ -96,7 +96,7 @@
     <source-file src="src/ios/Updater/HCPUpdateRequest.m" target-dir="Updater/"/>
     <header-file src="src/ios/Updater/HCPUpdateRequest.h" target-dir="Updater/"/>
     <header-file src="src/ios/Updater/HCPWorker.h" target-dir="Updater/"/>
- 
+
     <!-- sources for Utils folder -->
     <source-file src="src/ios/Utils/HCPCleanupHelper.m" target-dir="Utils/"/>
     <header-file src="src/ios/Utils/HCPCleanupHelper.h" target-dir="Utils/"/>

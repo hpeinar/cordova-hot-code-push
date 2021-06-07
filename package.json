@@ -1,6 +1,6 @@
 {
   "name": "teh-hot-code-push-plugin",
-  "version": "1.2.6",
+  "version": "1.2.6.1",
   "description": "Cordova plugin adopt to webview 2.0",
   "cordova": {
     "id": "teh-hot-code-push-plugin",
