@@ -1,6 +1,6 @@
 {
   "name": "teh-hot-code-push-plugin",
-  "version": "1.2.6.1",
+  "version": "1.2.6.2",
   "description": "Cordova plugin adopt to webview 2.0",
   "cordova": {
     "id": "teh-hot-code-push-plugin",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:amosbaby/cordova-hot-code-push.git"
+    "url": "git@github.com:Shatnik77/cordova-hot-code-push.git"
   },
   "keywords": [
     "cordova",
@@ -37,10 +37,10 @@
   "dependencies": {
     "xml2js": "^0.4"
   },
-  "author": "Amos Lee",
+  "author": "Shatnik77",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/amosbaby/cordova-hot-code-push"
+    "url": "https://github.com/Shatnik77/cordova-hot-code-push"
   },
-  "homepage": "https://github.com/amosbaby/cordova-hot-code-push"
+  "homepage": "https://github.com/Shatnik77/cordova-hot-code-push"
 }

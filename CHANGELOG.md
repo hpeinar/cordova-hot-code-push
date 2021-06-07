@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.2.6.2 (2021-06-07)
+
+Fixed url link repo
 ## 1.2.6.1 (2021-06-07)
 
 #1 Fixed requireCordovaModule
