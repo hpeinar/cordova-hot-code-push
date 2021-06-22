@@ -1,4 +1,7 @@
 # Change Log
+## 1.2.6-4 (2021-06-22)
+Fixed reload on Android for non Ionic user
+
 ## 1.2.6-3 (2021-06-07)
 
 Fixed version
@@ -6,6 +9,10 @@ Fixed version
 ## 1.2.6.2 (2021-06-07)
 
 Fixed url link repo
+## 1.2.6.1 (2021-06-07)
+
+#1 Fixed requireCordovaModule
+
 ## 1.2.6.1 (2021-06-07)
 
 #1 Fixed requireCordovaModule

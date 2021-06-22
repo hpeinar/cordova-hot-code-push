@@ -667,21 +667,15 @@ public class HotCodePushPlugin extends CordovaPlugin {
             cArg[0] = String.class;
             webView.getEngine().getClass().getDeclaredMethod("setServerBasePath", cArg).invoke(webView.getEngine(),
                     basePath);
-        } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
-
+            Log.w("CHCP","Cannot restarted through setServerBasePath", e);
+            Log.d("CHCP","Trying to restart by default");
+            try {
+                // load index page from the external source
+                webView.loadUrlIntoView(FILE_PREFIX + external, false);
+            } catch (Exception err) {
+                 Log.e("CHCP","Cannot restarted by default",err);
+            }
         }
 
         Log.d("CHCP", "Loading external page: " + external);
@@ -921,7 +915,7 @@ public class HotCodePushPlugin extends CordovaPlugin {
                 }
             });
         }else{
-            Log.println( Log.DEBUG,"update install complete","安装完成下次启动将使用该目录");
+            Log.d("CHCP","Update install complete. Need reload");
         }
         cleanupFileSystemFromOldReleases();
     }
