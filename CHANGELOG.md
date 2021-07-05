@@ -1,4 +1,8 @@
 # Change Log
+
+## 1.2.6-5 (2021-07-05)
+You can get static and chcp from one link #7
+
 ## 1.2.6-4 (2021-06-22)
 Fixed reload on Android for non Ionic user
 
