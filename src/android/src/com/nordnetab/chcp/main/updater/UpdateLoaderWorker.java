@@ -79,10 +79,12 @@ class UpdateLoaderWorker implements WorkerTask {
         final ContentConfig newContentConfig = newAppConfig.getContentConfig();
         if (newContentConfig == null
                 || TextUtils.isEmpty(newContentConfig.getReleaseVersion())
-                || TextUtils.isEmpty(newContentConfig.getContentUrl())) {
+                || TextUtils.isEmpty(newContentConfig.getContentUrl()) ? TextUtils.isEmpty(applicationConfigUrl) : false) {
             setErrorResult(ChcpError.NEW_APPLICATION_CONFIG_IS_INVALID, null);
             return;
         }
+
+        final String urlContent = TextUtils.isEmpty(newContentConfig.getContentUrl()) ? getBaseUrl(applicationConfigUrl) : newContentConfig.getContentUrl();
 
         // check if there is a new content version available
         if (newContentConfig.getReleaseVersion().equals(oldAppConfig.getContentConfig().getReleaseVersion())) {
@@ -97,7 +99,7 @@ class UpdateLoaderWorker implements WorkerTask {
         }
 
         // download new content manifest
-        final ContentManifest newContentManifest = downloadContentManifest(newContentConfig.getContentUrl());
+        final ContentManifest newContentManifest = downloadContentManifest(urlContent);
         if (newContentManifest == null) {
             setErrorResult(ChcpError.FAILED_TO_DOWNLOAD_CONTENT_MANIFEST, newAppConfig);
             return;
@@ -119,7 +121,7 @@ class UpdateLoaderWorker implements WorkerTask {
         recreateDownloadFolder(filesStructure.getDownloadFolder());
 
         // download files
-        boolean isDownloaded = downloadNewAndChangedFiles(newContentConfig.getContentUrl(), diff);
+        boolean isDownloaded = downloadNewAndChangedFiles(urlContent, diff);
         if (!isDownloaded) {
             cleanUp();
             setErrorResult(ChcpError.FAILED_TO_DOWNLOAD_UPDATE_FILES, newAppConfig);
@@ -134,6 +136,15 @@ class UpdateLoaderWorker implements WorkerTask {
         setSuccessResult(newAppConfig);
 
         Log.d("CHCP", "Loader worker has finished");
+    }
+
+    /**
+     * Get url from fetch options
+     * @param applicationConfigUrl url where our chcp lies
+     * @return base url (without chcp.json)
+     */
+    private String getBaseUrl(final String applicationConfigUrl) {
+        return applicationConfigUrl.substring(0,applicationConfigUrl.lastIndexOf(PluginFilesStructure.CONFIG_FILE_NAME));
     }
 
     /**

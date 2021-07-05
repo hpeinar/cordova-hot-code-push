@@ -97,8 +97,10 @@
             return;
         }
         
+        NSURL *urlContent = (newAppConfig.contentConfig.contentURL == nil) ? _configURL.URLByDeletingLastPathComponent : newAppConfig.contentConfig.contentURL;
+        
         // download new content manifest
-        NSURL *manifestFileURL = [newAppConfig.contentConfig.contentURL URLByAppendingPathComponent:_pluginFiles.manifestFileName];
+        NSURL *manifestFileURL = [urlContent URLByAppendingPathComponent:_pluginFiles.manifestFileName];
         [configDownloader downloadDataFromUrl:manifestFileURL requestHeaders:_requestHeaders completionBlock:^(NSData *data, NSError *error) {
             HCPContentManifest *newManifest = [self getManifestConfigFromData:data error:&error];
             if (newManifest == nil) {
@@ -126,7 +128,7 @@
             // if there is anything to load - do that
             NSArray *updatedFiles = manifestDiff.updateFileList;
             if (updatedFiles.count > 0) {
-                [self downloadUpdatedFiles:updatedFiles appConfig:newAppConfig manifest:newManifest];
+                [self downloadUpdatedFiles:updatedFiles appConfig:newAppConfig manifest:newManifest urlContent:urlContent];
                 return;
             }
             
@@ -144,11 +146,12 @@
 
 - (void)downloadUpdatedFiles:(NSArray *)updatedFiles
                    appConfig:(HCPApplicationConfig *)newAppConfig
-                    manifest:(HCPContentManifest *)newManifest {
+                    manifest:(HCPContentManifest *)newManifest
+                    urlContent:(NSURL *) urlContent {
     
     // download files
     HCPFileDownloader *downloader = [[HCPFileDownloader alloc] initWithFiles:updatedFiles
-                                                                   srcDirURL:newAppConfig.contentConfig.contentURL
+                                                                   srcDirURL:urlContent
                                                                    dstDirURL:_pluginFiles.downloadFolder
                                                               requestHeaders:_requestHeaders];
     [downloader startDownload:newAppConfig workerId:_workerId CompletionBlock:^(NSError *error) {
