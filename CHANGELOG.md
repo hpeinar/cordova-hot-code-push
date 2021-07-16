@@ -1,5 +1,9 @@
 # Change Log
 
+
+## 1.2.6-7 (2021-07-16)
+Hot fix
+
 ## 1.2.6-6 (2021-07-16)
 Fixed url reload for ios #4
 

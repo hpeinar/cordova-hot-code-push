@@ -320,7 +320,7 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
         
         NSLog(@"reset the base server success, start reload app");
     }else{
-		NSLog(@"Cannot restarted through setServerBasePath");]
+		NSLog(@"Cannot restarted through setServerBasePath");
 		NSLog(@"Trying to restart by default");
 		[self loadURL: [self indexPageFromConfigXml]];
     }
