@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.2.6-6 (2021-07-16)
+Fixed url reload for ios #4
+
 ## 1.2.6-5 (2021-07-05)
 You can get static and chcp from one link #7
 

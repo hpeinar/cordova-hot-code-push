@@ -255,10 +255,11 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
 - (void)loadURL:(NSString *)url {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         // 因为只重启了本地服务，只需要重新加载首页就行
-        NSString * baseUrl = @"http://localhost";
-        int portNumber = [self.commandDelegate.settings cordovaFloatSettingForKey:@"WKPort" defaultValue:8080];
+        //NSString * baseUrl = @"http://localhost";
+        //int portNumber = [self.commandDelegate.settings cordovaFloatSettingForKey:@"WKPort" defaultValue:8080];
     
-        NSString *path =  [NSString stringWithFormat:@"%@:%d", baseUrl, portNumber];
+        //NSString *path =  [NSString stringWithFormat:@"%@:%d", baseUrl, portNumber];
+		NSString *path = [NSString stringWithFormat:@"%@%@", _filesStructure.wwwFolder.absoluteString, url];
         NSURL *loadURL = [NSURL URLWithString:path];
         NSURLRequest *request = [NSURLRequest requestWithURL:loadURL
                                                  cachePolicy:NSURLRequestReloadIgnoringCacheData
@@ -319,8 +320,9 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
         
         NSLog(@"reset the base server success, start reload app");
     }else{
-        // 如果不能响应，则不需要再调用切换了，保持APP在未更新状态
-        NSLog(@"cannot reset the base server, keep current page");
+		NSLog(@"Cannot restarted through setServerBasePath");]
+		NSLog(@"Trying to restart by default");
+		[self loadURL: [self indexPageFromConfigXml]];
     }
     
 }
