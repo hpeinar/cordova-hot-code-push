@@ -110,7 +110,7 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
         _pluginInternalPrefs.previousReleaseVersionName = @"";
         HCPApplicationConfig *config = [HCPApplicationConfig configFromBundle:[HCPFilesStructure defaultConfigFileName]];
         _pluginInternalPrefs.currentReleaseVersionName = config.contentConfig.releaseVersion;
-        
+        _filesStructure = [[HCPFilesStructure alloc] initWithReleaseVersion:_pluginInternalPrefs.currentReleaseVersionName];
         [_pluginInternalPrefs saveToUserDefaults];
     }
     
@@ -259,7 +259,7 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
         //int portNumber = [self.commandDelegate.settings cordovaFloatSettingForKey:@"WKPort" defaultValue:8080];
     
         //NSString *path =  [NSString stringWithFormat:@"%@:%d", baseUrl, portNumber];
-		NSString *path = [NSString stringWithFormat:@"%@%@", _filesStructure.wwwFolder.absoluteString, url];
+		NSString *path = [NSString stringWithFormat:@"%@%@", self->_filesStructure.wwwFolder.absoluteString, url];
         NSURL *loadURL = [NSURL URLWithString:path];
         NSURLRequest *request = [NSURLRequest requestWithURL:loadURL
                                                  cachePolicy:NSURLRequestReloadIgnoringCacheData
@@ -848,10 +848,10 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
     
     _appUpdateRequestDialog = [[HCPAppUpdateRequestAlertDialog alloc] initWithMessage:message storeUrl:_appConfig.storeUrl onSuccessBlock:^{
         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-        _appUpdateRequestDialog = nil;
+        self->_appUpdateRequestDialog = nil;
     } onFailureBlock:^{
         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
-        _appUpdateRequestDialog = nil;
+        self->_appUpdateRequestDialog = nil;
     }];
     
     [_appUpdateRequestDialog show];

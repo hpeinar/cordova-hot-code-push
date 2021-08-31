@@ -9,15 +9,15 @@
 @interface HCPAppUpdateRequestAlertDialog()<UIAlertViewDelegate> {
     NSString *_message;
     NSString *_storeUrl;
-    void (^_onSuccess)();
-    void (^_onFailure)();
+    void (^_onSuccess)(void);
+    void (^_onFailure)(void);
 }
 
 @end
 
 @implementation HCPAppUpdateRequestAlertDialog
 
-- (instancetype)initWithMessage:(NSString *)message storeUrl:(NSString *)storeUrl onSuccessBlock:(void (^)())onSuccess onFailureBlock:(void (^)())onFailure {
+- (instancetype)initWithMessage:(NSString *)message storeUrl:(NSString *)storeUrl onSuccessBlock:(void (^)(void))onSuccess onFailureBlock:(void (^)(void))onFailure {
     self = [super init];
     if (self) {
         _message = message;

@@ -84,24 +84,24 @@
         }
         
         // check if new version is available
-        if ([newAppConfig.contentConfig.releaseVersion isEqualToString:_oldAppConfig.contentConfig.releaseVersion]) {
+        if ([newAppConfig.contentConfig.releaseVersion isEqualToString:self->_oldAppConfig.contentConfig.releaseVersion]) {
             [self notifyNothingToUpdate:newAppConfig];
             return;
         }
         
         // check if current native version supports new content
-        if (newAppConfig.contentConfig.minimumNativeVersion > _nativeInterfaceVersion) {
+        if (newAppConfig.contentConfig.minimumNativeVersion > self->_nativeInterfaceVersion) {
             [self notifyWithError:[NSError errorWithCode:kHCPApplicationBuildVersionTooLowErrorCode
                                              description:@"Application build version is too low for this update"]
                 applicationConfig:newAppConfig];
             return;
         }
         
-        NSURL *urlContent = (newAppConfig.contentConfig.contentURL == nil) ? _configURL.URLByDeletingLastPathComponent : newAppConfig.contentConfig.contentURL;
+        NSURL *urlContent = (newAppConfig.contentConfig.contentURL == nil) ? self->_configURL.URLByDeletingLastPathComponent : newAppConfig.contentConfig.contentURL;
         
         // download new content manifest
-        NSURL *manifestFileURL = [urlContent URLByAppendingPathComponent:_pluginFiles.manifestFileName];
-        [configDownloader downloadDataFromUrl:manifestFileURL requestHeaders:_requestHeaders completionBlock:^(NSData *data, NSError *error) {
+        NSURL *manifestFileURL = [urlContent URLByAppendingPathComponent:self->_pluginFiles.manifestFileName];
+        [configDownloader downloadDataFromUrl:manifestFileURL requestHeaders:self->_requestHeaders completionBlock:^(NSData *data, NSError *error) {
             HCPContentManifest *newManifest = [self getManifestConfigFromData:data error:&error];
             if (newManifest == nil) {
                 [self notifyWithError:[NSError errorWithCode:kHCPFailedToDownloadContentManifestErrorCode
@@ -111,19 +111,19 @@
             }
             
             // compare manifests to find out if anything has changed since the last update
-            HCPManifestDiff *manifestDiff = [_oldManifest calculateDifference:newManifest];
+            HCPManifestDiff *manifestDiff = [self->_oldManifest calculateDifference:newManifest];
             if (manifestDiff.isEmpty) {
-                [_manifestStorage store:newManifest inFolder:_pluginFiles.wwwFolder];
-                [_appConfigStorage store:newAppConfig inFolder:_pluginFiles.wwwFolder];
+                [self->_manifestStorage store:newManifest inFolder:self->_pluginFiles.wwwFolder];
+                [self->_appConfigStorage store:newAppConfig inFolder:self->_pluginFiles.wwwFolder];
                 [self notifyNothingToUpdate:newAppConfig];
                 return;
             }
             
             // switch file structure to new release
-            _pluginFiles = [[HCPFilesStructure alloc] initWithReleaseVersion:newAppConfig.contentConfig.releaseVersion];
+            self->_pluginFiles = [[HCPFilesStructure alloc] initWithReleaseVersion:newAppConfig.contentConfig.releaseVersion];
             
             // create new download folder
-            [self createNewReleaseDownloadFolder:_pluginFiles.downloadFolder];
+            [self createNewReleaseDownloadFolder:self->_pluginFiles.downloadFolder];
             
             // if there is anything to load - do that
             NSArray *updatedFiles = manifestDiff.updateFileList;
@@ -134,8 +134,8 @@
             
             // otherwise - update holds only files for deletion;
             // just save new configs and notify subscribers about success
-            [_manifestStorage store:newManifest inFolder:_pluginFiles.downloadFolder];
-            [_appConfigStorage store:newAppConfig inFolder:_pluginFiles.downloadFolder];
+            [self->_manifestStorage store:newManifest inFolder:self->_pluginFiles.downloadFolder];
+            [self->_appConfigStorage store:newAppConfig inFolder:self->_pluginFiles.downloadFolder];
             
             [self notifyUpdateDownloadSuccess:newAppConfig];
         }];
@@ -157,7 +157,7 @@
     [downloader startDownload:newAppConfig workerId:_workerId CompletionBlock:^(NSError *error) {
          if (error) {
                    // remove new release folder
-                   [[NSFileManager defaultManager] removeItemAtURL:_pluginFiles.contentFolder error:nil];
+                   [[NSFileManager defaultManager] removeItemAtURL:self->_pluginFiles.contentFolder error:nil];
                    
                    // notify about the error
                    [self notifyWithError:[NSError errorWithCode:kHCPFailedToDownloadUpdateFilesErrorCode
@@ -167,8 +167,8 @@
                }
                          
                // store configs
-               [_manifestStorage store:newManifest inFolder:_pluginFiles.downloadFolder];
-               [_appConfigStorage store:newAppConfig inFolder:_pluginFiles.downloadFolder];
+               [self->_manifestStorage store:newManifest inFolder:self->_pluginFiles.downloadFolder];
+               [self->_appConfigStorage store:newAppConfig inFolder:self->_pluginFiles.downloadFolder];
                          
                // notify that we are done
                [self notifyUpdateDownloadSuccess:newAppConfig];

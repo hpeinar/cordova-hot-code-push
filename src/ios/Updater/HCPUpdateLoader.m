@@ -60,7 +60,7 @@
     // execute in background, so the callbacks don't block main thread
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [task runWithComplitionBlock:^{
-            _isExecuting = NO;
+            self->_isExecuting = NO;
         }];
     });
 }
