@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.2.6-8 (2021-08-31)
+Fixed folder name for new static #14
+Fixed deprecated warnings
 
 ## 1.2.6-7 (2021-07-16)
 Hot fix
