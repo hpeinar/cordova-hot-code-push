@@ -21,7 +21,7 @@
  *
  *  @return instance of the object
  */
-- (instancetype)initWithMessage:(NSString *)message storeUrl:(NSString *)storeUrl onSuccessBlock:(void (^)())onSuccess onFailureBlock:(void (^)())onFailure;
+- (instancetype)initWithMessage:(NSString *)message storeUrl:(NSString *)storeUrl onSuccessBlock:(void (^)(void))onSuccess onFailureBlock:(void (^)(void))onFailure;
 
 /**
  *  Show dialog to the user.
