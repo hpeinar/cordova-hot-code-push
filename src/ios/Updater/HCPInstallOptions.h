@@ -12,7 +12,7 @@
 @interface HCPInstallOptions : NSObject
 
 /**
- *  是否立即重启
+ *  Reload bool
  */
 @property (nonatomic) BOOL reload;
 

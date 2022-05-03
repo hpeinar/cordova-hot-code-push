@@ -24,37 +24,23 @@
     
     NSMutableDictionary * filesMap = [[NSMutableDictionary alloc ] init];
     
-    /**
-     * 将oldFiles推入到filesMap中
-     */
     for (HCPManifestFile *oldFile in self.files) {
         [filesMap setValue:oldFile forKey:oldFile.name];
     }
-    
-    /**
-     * 遍历newFiles
-     * 1. 如果在filesMap中找不到fileName对应的file,则说明是新加的
-     * 2. 如果找到了，且hash值不同，则说明更新的
-     * 3. 将2中找到的删除掉，剩下的就是需要移除的
-     */
     
     for (HCPManifestFile *newFile in comparedManifest.files){
         
         HCPManifestFile * oldFile = [filesMap objectForKey:newFile.name];
         
         if(oldFile == NULL){
-            // 如果没有则加入
             [addedFiles addObject:newFile];
         }else {
-            // 如果有同名的文件
             if(![oldFile.md5Hash isEqualToString:newFile.md5Hash]){
-                // 如果同名文件hash值不同则需要改动
                 [changedFiles addObject:newFile];
             }
             [filesMap removeObjectForKey:oldFile.name];
         }
     }
-    // 同名的已去除，剩下的就是改动的(新增不再这个字典里)
     [deletedFiles addObjectsFromArray:[filesMap allValues]];
     return [[HCPManifestDiff alloc] initWithAddedFiles:addedFiles changedFiles:changedFiles deletedFiles:deletedFiles];
 }

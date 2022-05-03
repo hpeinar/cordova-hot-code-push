@@ -196,7 +196,6 @@ function broadcastEventFromNative(nativeMessage) {
     detail: params
   })
   // document.dispatchEvent(chcpEvent)
-  // 使用fireDocumentEvent可以带参数
   cordova.fireDocumentEvent(nativeMessage.action, {
     data: nativeMessage.data,
     error: nativeMessage.error

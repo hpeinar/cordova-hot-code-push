@@ -122,32 +122,20 @@ public class ContentManifest {
         final List<ManifestFile> deletedFiles = diff.deletedFiles();
         final List<ManifestFile> addedFiles = diff.addedFiles();
         final Map<String,ManifestFile> filesMap = new HashMap<String,ManifestFile> ();
-        /**
-         * 将oldFiles推入到filesMap中
-         */
+
         for (ManifestFile oldFile : oldManifestFiles) {
             filesMap.put(oldFile.name,oldFile);
         }
 
-        /**
-         * 遍历newFiles
-         * 1. 如果在filesMap中找不到fileName对应的file,则说明是新加的
-         * 2. 如果找到了，且hash值不同，则说明更新的
-         * 3. 将2中找到的删除掉，剩下的就是需要移除的
-         */
         for (ManifestFile newFile : newManifestFiles){
             final  ManifestFile oldFile = filesMap.get(newFile.name);
             if(oldFile == null){
-                // 如果没有则加入
                 addedFiles.add(newFile);
             }else {
-                // 如果有同名的文件
                  if(!oldFile.hash.equals(newFile.hash)){
-                     // 如果同名文件hash值不同则需要改动
                     changedFiles.add(newFile);
 
                 }
-                 // 删除文件map中同名文件：不管hash值是否相同
                 filesMap.remove(oldFile.name);
             }
         }

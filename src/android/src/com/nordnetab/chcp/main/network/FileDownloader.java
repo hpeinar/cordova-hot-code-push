@@ -48,7 +48,6 @@ public class FileDownloader {
             final List<ManifestFile> files, final Map<String, String> requestHeaders) throws Exception {
         Integer total = files.size();
         for (int current = 0; current < total; current++) {
-            // 下载前通知当前下载到哪儿了
             UpdateDownloadProgressEvent event = new UpdateDownloadProgressEvent();
             event.data().put("total", total);
             event.data().put("current", current);
@@ -73,7 +72,6 @@ public class FileDownloader {
             final Map<String, String> requestHeaders) throws Exception {
         Log.d("CHCP", "Loading file: " + urlFrom);
         final MD5 md5 = new MD5();
-        // 发出通知
         final File downloadFile = new File(filePath);
         FilesUtility.delete(downloadFile);
         FilesUtility.ensureDirectoryExists(downloadFile.getParentFile());
@@ -93,7 +91,6 @@ public class FileDownloader {
         output.flush();
         output.close();
         input.close();
-        // 发出通知
         final String downloadedFileHash = md5.calculateHash();
         if (!downloadedFileHash.equals(checkSum)) {
             throw new IOException("File is corrupted: checksum " + checkSum + " doesn't match hash "

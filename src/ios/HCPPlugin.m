@@ -254,7 +254,6 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
  */
 - (void)loadURL:(NSString *)url {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        // 因为只重启了本地服务，只需要重新加载首页就行
         //NSString * baseUrl = @"http://localhost";
         //int portNumber = [self.commandDelegate.settings cordovaFloatSettingForKey:@"WKPort" defaultValue:8080];
     
@@ -297,15 +296,13 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
 }
 
 /**
- * 切换本地服务根目录到外存储目录
+ * Need to switch WebView server base path to external storage 
  */
 -(void) switchServerBaseToExternalPath{
     
     NSString * basePath = [_filesStructure.wwwFolder.absoluteString stringByReplacingOccurrencesOfString:@"file://" withString:@""];
-    // 先要确保webVieEngine能响应以下两个方法
     
     if([self.webViewEngine respondsToSelector:@selector(setServerBasePath:)]){
-        // 先判断之前的本地服务根目录是否与将要切换的路径相同，如果不相同则切换，否则不切换
         NSString * preBasePath = [self.webViewEngine performSelector:@selector(basePath)];
         if( ![preBasePath isEqualToString:basePath] && [[NSFileManager defaultManager] fileExistsAtPath:basePath]){
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -717,15 +714,10 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
     
     if(_shouldReload){
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-         // 热更新下载完毕时需要切换一下服务根目录
         [self switchServerBaseToExternalPath];
 
         });
-    }else{
-        NSLog(@"热更新安装完毕，下次启动时将从新的目录启动");
     }
-    
-  
     
     [self cleanupFileSystemFromOldReleases];
 }
@@ -821,7 +813,6 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
 
 - (void)jsInstallUpdate:(CDVInvokedUrlCommand *)command {
        NSDictionary *optionsFromJS = command.arguments.count ? command.arguments[0] : nil;
-    NSLog(@"jsInstallUpdate安装提示:%@",optionsFromJS);
     _shouldReload = true;
     if(optionsFromJS != nil && optionsFromJS != [NSNull null]){
         HCPInstallOptions * options = [[HCPInstallOptions alloc] initWithDictionary:optionsFromJS];
@@ -890,23 +881,14 @@ static NSString *const DEFAULT_STARTING_PAGE = @"index.html";
     _nothingUpdateCallback = command.callbackId;
 }
 
-/**
- * 更新install完成
- */
 - (void)jsUpdateInstalled:(CDVInvokedUrlCommand *)command{
     _updateInstalledCallback = command.callbackId;
 }
 
-/**
- * 更新install失败
- */
 - (void)jsUpdateInstallFailed:(CDVInvokedUrlCommand *)command{
     _updateInstallFailedCallback = command.callbackId;
 }
 
-/**
- * 更新下载失败
- */
 - (void)jsUpdateDownloadFailed:(CDVInvokedUrlCommand *)command{
     _downloadFailedCallback = command.callbackId;
 }

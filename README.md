@@ -1,8 +1,6 @@
 # This is A fork project
 
-该项目是 fork 自[nordnet](https://github.com/nordnet)的[cordova-hot-code-push](https://github.com/nordnet/cordova-hot-code-push)项目，原项目已经不再维护了。
-本项目是站在前人的基础上做了一些修改，兼容了 ionic3 至 ionic4
-
+fork of https://github.com/Shatnik77/cordova-hot-code-push
 ## Supported platforms
 
 - Android 5.1.2 or above.
